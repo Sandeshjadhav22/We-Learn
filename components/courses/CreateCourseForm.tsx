@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import axios from "axios"
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,7 +41,7 @@ interface CreateCourseFormProps {
 }
 
 const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
-    const router = useRouter()
+  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,17 +53,16 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
   });
 
   // 2. Define a submit handler.
-  const  onSubmit = async(values: z.infer<typeof formSchema>) => {
-   
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-        const response = await axios.post('/api/courses',values)
-        router.push(`/instructor/courses/${response.data.id}/basic`)
-        toast.success("New Course created")
+      const response = await axios.post("/api/courses", values);
+      router.push(`/instructor/courses/${response.data.id}/basic`);
+      toast.success("New Course created");
     } catch (error) {
-        console.log("Failed to create new course",error);
-        toast.error("Something went wrong")
+      console.log("Failed to create new course", error);
+      toast.error("Something went wrong");
     }
-  }
+  };
   return (
     <div className="p-10">
       <h1 className="text-xl font-bold">Let give some basic for your course</h1>
@@ -83,7 +82,10 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: Web Devlopment for begineer" {...field} />
+                  <Input
+                    placeholder="Ex: Web Devlopment for begineer"
+                    {...field}
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -112,11 +114,12 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
                 <FormLabel>Subcategory</FormLabel>
                 <FormControl>
                   <ComboBox
-                    options={categories.find(
-                      (category) =>
-                        category.value ===
-                          form.watch("categoryId")
-                    )?.subCategories || []}
+                    options={
+                      categories.find(
+                        (category) =>
+                          category.value === form.watch("categoryId")
+                      )?.subCategories || []
+                    }
                     {...field}
                   />
                 </FormControl>
