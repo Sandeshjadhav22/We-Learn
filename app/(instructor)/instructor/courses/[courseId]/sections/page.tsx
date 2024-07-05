@@ -16,13 +16,13 @@ const CourseCurriculumPage = async ({ params }: { params: { courseId: string }})
       id: params.courseId,
       instructorId: userId,
     },
-    // include: {
-    //   sections: {
-    //     orderBy: {
-    //       position: "asc",
-    //     },
-    //   },
-    // },
+    include: {
+      sections: {
+        orderBy: {
+          position: "asc",
+        },
+      },
+    },
   });
 
   if (!course) {

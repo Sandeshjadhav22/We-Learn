@@ -1,5 +1,5 @@
 "use client";
-import { Course } from "@prisma/client";
+import { Course, Section } from "@prisma/client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import toast from "react-hot-toast";
+import SectionList from "./SectionList";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -24,7 +25,11 @@ const formSchema = z.object({
   }),
 });
 
-const CreateSectionForm = ({ course }: { course: Course }) => {
+const CreateSectionForm = ({
+  course,
+}: {
+  course: Course & { sections: Section[] };
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const routes = [
@@ -60,6 +65,19 @@ const CreateSectionForm = ({ course }: { course: Course }) => {
     }
   };
 
+  const onReorder = async (updateData: { id: string; position: number }[]) => {
+    try {
+      await axios.put(`/api/courses/${course.id}/sections/reorder`, {
+        list: updateData,
+      });
+      toast.success("Sections reordered successfully");
+    } catch (err) {
+      console.log("Failed to reorder sections", err);
+      toast.error("Something went wrong!");
+    }
+  };
+
+
   return (
     <div className=" px-10 py-6">
       <div className="flex gap-5">
@@ -72,6 +90,14 @@ const CreateSectionForm = ({ course }: { course: Course }) => {
         ))}
       </div>
 
+      <SectionList
+        items={course.sections || []}
+        onReorder={onReorder}
+        onEdit={(id) =>
+          router.push(`/instructor/courses/${course.id}/sections/${id}`)
+        }
+      />
+      
       <h1 className="text-xl font-bold mt-5">Add New Section</h1>
 
       <Form {...form}>
