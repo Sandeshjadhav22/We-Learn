@@ -9,7 +9,8 @@ import Link from "next/link";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Trash } from "lucide-react";
+import { ArrowLeft, Loader2, Trash } from "lucide-react";
+import MuxPlayer from "@mux/mux-player-react"
 
 import { Button } from "@/components/ui/button";
 import {
@@ -60,14 +61,15 @@ const EditSectionForm = ({
     },
   });
 
+  const {isValid, isSubmitting} = form.formState
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course Updated");
+      await axios.post(`/api/courses/${courseId}/sections/${section.id}`, values);
+      toast.success("Section Updated");
       router.refresh();
     } catch (err) {
-      console.log("Failed to update the course", err);
+      console.log("Failed to update the section", err);
       toast.error("Something went wrong!");
     }
   };
@@ -134,7 +136,14 @@ const EditSectionForm = ({
               </FormItem>
             )}
           />
-
+           {section.videoUrl && (
+            <div className="my-5">
+              <MuxPlayer
+              playbackId={section.muxData?.playbackId || ""}
+              className="md:max-w-[600px]"
+              />
+            </div>
+           )}
           <FormField
             control={form.control}
             name="videoUrl"
@@ -146,6 +155,7 @@ const EditSectionForm = ({
                     value={field.value || ""}
                     onChange={(url) => field.onChange(url)}
                     endpoint="sectionVideo"
+                    page="Edit Section"
                   />
                 </FormControl>
 
@@ -181,7 +191,9 @@ const EditSectionForm = ({
                 Cancel
               </Button>
             </Link>
-            <Button type="submit">save</Button>
+            <Button type="submit" disabled={!isValid || isSubmitting}>
+              {isSubmitting? <Loader2 className="h-4 w-4 animate-spin"/> : "save"}
+            </Button>
           </div>
         </form>
       </Form>
