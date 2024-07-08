@@ -10,7 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, Trash } from "lucide-react";
-import MuxPlayer from "@mux/mux-player-react"
+import MuxPlayer from "@mux/mux-player-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +28,7 @@ import FileUpload from "../custom/FileUpload";
 import { Switch } from "@/components/ui/switch";
 import ResourceForm from "./ResourceForm";
 import Delete from "../custom/Delete";
+import PublishButton from "../custom/PublishButton";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -62,11 +63,14 @@ const EditSectionForm = ({
     },
   });
 
-  const {isValid, isSubmitting} = form.formState
+  const { isValid, isSubmitting } = form.formState;
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/courses/${courseId}/sections/${section.id}`, values);
+      await axios.post(
+        `/api/courses/${courseId}/sections/${section.id}`,
+        values
+      );
       toast.success("Section Updated");
       router.refresh();
     } catch (err) {
@@ -86,8 +90,14 @@ const EditSectionForm = ({
         </Link>
 
         <div className="flex gap-4 items-start">
-          <Button variant="outline">Publish</Button>
-         <Delete item="section" courseId={courseId} sectionId={section.id}/>
+          <PublishButton
+            disabled={!isCompleted}
+            courseId={courseId}
+            sectionId={section.id}
+            isPublished={section.isPublished}
+            page="Section"
+          />
+          <Delete item="section" courseId={courseId} sectionId={section.id} />
         </div>
       </div>
 
@@ -104,7 +114,9 @@ const EditSectionForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>
+                  Title <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Ex: Introduction to web devlopment"
@@ -122,7 +134,9 @@ const EditSectionForm = ({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  Description <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <RichEditor
                     placeholder="What is this section about?"
@@ -134,20 +148,22 @@ const EditSectionForm = ({
               </FormItem>
             )}
           />
-           {section.videoUrl && (
+          {section.videoUrl && (
             <div className="my-5">
               <MuxPlayer
-              playbackId={section.muxData?.playbackId || ""}
-              className="md:max-w-[600px]"
+                playbackId={section.muxData?.playbackId || ""}
+                className="md:max-w-[600px]"
               />
             </div>
-           )}
+          )}
           <FormField
             control={form.control}
             name="videoUrl"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Video</FormLabel>
+                <FormLabel>
+                  Video <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <FileUpload
                     value={field.value || ""}
@@ -190,12 +206,16 @@ const EditSectionForm = ({
               </Button>
             </Link>
             <Button type="submit" disabled={!isValid || isSubmitting}>
-              {isSubmitting? <Loader2 className="h-4 w-4 animate-spin"/> : "save"}
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "save"
+              )}
             </Button>
           </div>
         </form>
       </Form>
-      <ResourceForm section={section} courseId={courseId}/>
+      <ResourceForm section={section} courseId={courseId} />
     </>
   );
 };

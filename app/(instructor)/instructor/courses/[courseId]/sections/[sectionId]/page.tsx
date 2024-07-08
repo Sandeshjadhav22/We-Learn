@@ -1,4 +1,5 @@
 // import AlertBanner from "@/components/custom/AlertBanner";  
+import AlertBanner from "@/components/custom/AlertBanner";
 import EditSectionForm from "@/components/sections/EditSectionForm";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
@@ -49,11 +50,11 @@ const SectionDetailsPage = async ({
 
   return (
     <div className="px-10">
-      {/* <AlertBanner
+      <AlertBanner
         isCompleted={isCompleted}
         requiredFieldsCount={requiredFieldsCount}
         missingFieldsCount={missingFieldsCount}
-      /> */}
+      />
       <EditSectionForm
         section={section}
         courseId={params.courseId}
