@@ -38,7 +38,7 @@ const formSchema = z.object({
 });
 
 interface EditSectionFormProps {
-  section: Section & { resources: Resource[]; muxdata?: MuxData | null };
+  section: Section & { resources: Resource[]; muxData?: MuxData | null };
   courseId: string;
   isCompleted: boolean;
 }
