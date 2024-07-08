@@ -23,6 +23,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import { Trash } from "lucide-react";
+import Delete from "../custom/Delete";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -112,7 +113,7 @@ const EditCourseForm = ({
 
        <div className="flex gap-4 items-start">
         <Button variant="outline">Publish</Button>
-        <Button><Trash className="h-4 w-4"/>Delete</Button>
+        <Delete item="course" courseId={course.id}/>
        </div>
       </div>
       <Form {...form}>

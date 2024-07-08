@@ -27,6 +27,7 @@ import RichEditor from "../custom/RichEditor";
 import FileUpload from "../custom/FileUpload";
 import { Switch } from "@/components/ui/switch";
 import ResourceForm from "./ResourceForm";
+import Delete from "../custom/Delete";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -86,10 +87,7 @@ const EditSectionForm = ({
 
         <div className="flex gap-4 items-start">
           <Button variant="outline">Publish</Button>
-          <Button>
-            <Trash className="h-4 w-4" />
-            Delete
-          </Button>
+         <Delete item="section" courseId={courseId} sectionId={section.id}/>
         </div>
       </div>
 
