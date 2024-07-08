@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { ComboBox } from "../custom/ComboBox";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { Loader } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -42,7 +43,7 @@ interface CreateCourseFormProps {
 
 const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
   const router = useRouter();
-  // 1. Define your form.
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,7 +53,8 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
     },
   });
 
-  // 2. Define a submit handler.
+  const {isValid,isSubmitting} = form.formState
+  
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post("/api/courses", values);
@@ -128,7 +130,9 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={!isValid || isSubmitting}>
+            {isSubmitting ? <Loader className="h-4 w-4 animate-spin"/> : "Create"}
+          </Button>
         </form>
       </Form>
     </div>
