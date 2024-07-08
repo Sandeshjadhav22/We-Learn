@@ -116,7 +116,7 @@ const EditCourseForm = ({
        </div>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-5">
           <FormField
             control={form.control}
             name="title"
@@ -229,6 +229,7 @@ const EditCourseForm = ({
                     value={field.value || ""}
                     onChange={(url) => field.onChange(url)}
                     endpoint="courseBanner"
+                    page="Edit course"
                   />
                 </FormControl>
 

@@ -12,7 +12,7 @@ interface FileUploadProps {
   page: string;
 }
 
-const FileUpload = ({ value, onChange, endpoint, page }: FileUploadProps) => {
+const   FileUpload = ({ value, onChange, endpoint, page }: FileUploadProps) => {
   return (
     <div className="flex flex-col gap-2">
       {page === "Edit Course" && value !== "" && (

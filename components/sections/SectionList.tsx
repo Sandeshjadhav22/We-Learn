@@ -16,7 +16,7 @@ interface SectionListProps {
 
 const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [sections, setSections] = useState(items);
+  const [sections, setSections] = useState(items);    
 
   useEffect(() => {
     setIsMounted(true);
@@ -77,6 +77,7 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
                       <Grip className="h-4 w-4 cursor-pointer mr-4 hover:text-[#FDAB04]" />
                     </div>
                     {section.title}
+
                     <div className="ml-auto">
                       <Pencil
                         className="h-4 w-4 cursor-pointer hover:text-[#FDAB04]"
