@@ -33,9 +33,9 @@ model Course {
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])
 
-    sections Section[]
+  sections Section[]
 
-    // purchases Purchase[]
+  purchases Purchase[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -70,7 +70,6 @@ model Level {
   courses Course[]
 }
 
-
 model Section {
   id          String  @id @default(uuid())
   title       String
@@ -94,7 +93,6 @@ model Section {
 
   @@index([courseId])
 }
-
 
 model MuxData {
   id         String  @id @default(uuid())
@@ -135,4 +133,27 @@ model Progress {
 
   @@index([sectionId])
   @@unique([studentId, sectionId])
+}
+
+model Purchase {
+  id         String @id @default(uuid())
+  customerId String 
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([courseId])
+  @@unique([customerId, courseId])
+}
+
+model StripeCustomer {
+  id               String @id @default(uuid())
+  customerId       String @unique
+  stripeCustomerId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
